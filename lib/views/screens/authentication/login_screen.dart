@@ -59,7 +59,9 @@ class LoginScreen extends StatelessWidget {
                         return null;
                       }
                     },
-                    decoration: InputDecoration(
+                    decoration:
+
+                    InputDecoration(
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
