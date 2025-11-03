@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kartwala/controllers/auth_controller.dart';
 import 'package:kartwala/views/screens/authentication/login_screen.dart';
 
 class RegisterScreen extends StatelessWidget {
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
+  late String email = 'prashant12@gmail.com';
+  late String fullName = 'Prashant Kumar';
+  late String password = 'prashant123';
+  final authController _authController = authController();
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +56,9 @@ class RegisterScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+
                   TextFormField(
+                    onChanged: (value) => {fullName = value},
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Enter your name";
@@ -96,6 +103,7 @@ class RegisterScreen extends StatelessWidget {
                     ),
                   ),
                   TextFormField(
+                    onChanged: (value) => {email = value},
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Enter your email";
@@ -141,6 +149,7 @@ class RegisterScreen extends StatelessWidget {
                     ),
                   ),
                   TextFormField(
+                    onChanged: (value) => {password = value},
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Enter your password";
@@ -176,9 +185,18 @@ class RegisterScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 20),
                   InkWell(
-                    onTap: () {
+                    onTap: () async {
                       if (_globalKey.currentState!.validate()) {
-                        print("correct");
+                        print(email);
+                        print(password);
+                        print(fullName);
+
+                        await _authController.signUpUsers(
+                          context: context,
+                          email: email,
+                          password: password,
+                          fullName: fullName,
+                        );
                       } else {
                         print("incorrect");
                       }

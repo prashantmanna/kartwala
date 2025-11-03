@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:kartwala/views/screens/authentication/registerScreen.dart';
@@ -82,6 +80,7 @@ class LoginScreen extends StatelessWidget {
                           'assets/icons/email.png',
                           width: 20,
                           height: 20,
+                          color: Colors.blue.shade900,
                         ),
                       ),
                     ),
