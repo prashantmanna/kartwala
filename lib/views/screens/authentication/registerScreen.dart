@@ -3,12 +3,41 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kartwala/controllers/auth_controller.dart';
 import 'package:kartwala/views/screens/authentication/login_screen.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
+
   late String email = 'prashant12@gmail.com';
+
   late String fullName = 'Prashant Kumar';
+
   late String password = 'prashant123';
+
+  bool isLoading = false;
   final authController _authController = authController();
+
+  registerUser() async {
+    setState(() {
+      isLoading = true;
+    });
+    await _authController
+        .signUpUsers(
+          context: context,
+          email: email,
+          password: password,
+          fullName: fullName,
+        )
+        .whenComplete(() {
+          setState(() {
+            isLoading = false;
+            _globalKey.currentState!.reset();
+          });
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,6 +116,7 @@ class RegisterScreen extends StatelessWidget {
                           'assets/icons/user.png',
                           width: 20,
                           height: 20,
+                          color: Colors.blue.shade900,
                         ),
                       ),
                     ),
@@ -190,13 +220,7 @@ class RegisterScreen extends StatelessWidget {
                         print(email);
                         print(password);
                         print(fullName);
-
-                        await _authController.signUpUsers(
-                          context: context,
-                          email: email,
-                          password: password,
-                          fullName: fullName,
-                        );
+                        registerUser();
                       } else {
                         print("incorrect");
                       }
@@ -284,15 +308,17 @@ class RegisterScreen extends StatelessWidget {
                             ),
                           ),
                           Center(
-                            child: Text(
-                              "Sign Up",
-                              style: GoogleFonts.getFont(
-                                "Lato",
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            child: isLoading
+                                ? CircularProgressIndicator(color: Colors.white)
+                                : Text(
+                                    "Sign Up",
+                                    style: GoogleFonts.getFont(
+                                      "Lato",
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                           ),
                         ],
                       ),

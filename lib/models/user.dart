@@ -9,6 +9,7 @@ class User {
   final String state;
   final String city;
   final String locality;
+  final String token;
 
   User({
     required this.id,
@@ -18,6 +19,7 @@ class User {
     required this.state,
     required this.city,
     required this.locality,
+    required this.token,
   });
 
   //serialization: User object into Map
@@ -30,6 +32,7 @@ class User {
       "state": state,
       "city": city,
       "locality": locality,
+      "token": token,
     };
   }
 
@@ -52,6 +55,7 @@ class User {
       state: map['state'] as String? ?? "",
       city: map['city'] as String? ?? "",
       locality: map['locality'] as String? ?? "",
+      token: map['token'] as String? ?? "",
     );
   }
 

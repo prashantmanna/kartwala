@@ -1,9 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kartwala/controllers/auth_controller.dart';
 import 'package:kartwala/views/screens/authentication/registerScreen.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  late String email;
+
+  late String password;
+
+  final authController loginController = authController();
+
+  bool isLoading = false;
+
+  loginUser() async {
+    setState(() {
+      isLoading = true;
+    });
+    await loginController.SignInUser(
+      context: context,
+      email: email,
+      password: password,
+    ).whenComplete(() {
+      setState(() {
+        isLoading = false;
+        _formKey.currentState!.reset();
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +82,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
                   TextFormField(
+                    onChanged: (value) => {email = value},
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Enter your email";
@@ -59,18 +90,12 @@ class LoginScreen extends StatelessWidget {
                         return null;
                       }
                     },
-                    decoration:
-
-                    InputDecoration(
+                    decoration: InputDecoration(
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      enabled: true
-
-
-
-                      ,
+                      enabled: true,
                       filled: true,
                       focusedBorder: InputBorder.none,
                       enabledBorder: InputBorder.none,
@@ -104,6 +129,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
                   TextFormField(
+                    onChanged: (value) => {password = value},
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Enter your password";
@@ -139,9 +165,10 @@ class LoginScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 20),
                   InkWell(
-                    onTap: () {
+                    onTap: () async {
                       if (_formKey.currentState!.validate()) {
                         print("correct");
+                        loginUser();
                       } else {
                         print("incorrect");
                       }
@@ -229,15 +256,17 @@ class LoginScreen extends StatelessWidget {
                             ),
                           ),
                           Center(
-                            child: Text(
-                              "Sign In",
-                              style: GoogleFonts.getFont(
-                                "Lato",
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            child: isLoading
+                                ? CircularProgressIndicator(color: Colors.white)
+                                : Text(
+                                    "Sign In",
+                                    style: GoogleFonts.getFont(
+                                      "Lato",
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                           ),
                         ],
                       ),

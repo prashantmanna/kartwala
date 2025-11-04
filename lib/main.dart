@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kartwala/views/screens/Nav_screens/MainScreen.dart';
 import 'package:kartwala/views/screens/authentication/login_screen.dart';
 
 void main() {
@@ -10,6 +11,6 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: LoginScreen(), debugShowCheckedModeBanner: false);
+    return MaterialApp(home: MainScreen(), debugShowCheckedModeBanner: false);
   }
 }
