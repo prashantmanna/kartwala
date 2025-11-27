@@ -1,1 +1,1 @@
-String URI = "http://10.236.27.54:3000";
+const String URI = "http://10.0.2.2:3000";
