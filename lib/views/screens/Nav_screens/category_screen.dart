@@ -5,6 +5,7 @@ import 'package:kartwala/controllers/subCategoryController.dart';
 import 'package:kartwala/models/category.dart';
 import 'package:kartwala/models/subcategorymodel.dart';
 import 'package:kartwala/views/screens/Nav_screens/Widgets/Header_widgets.dart';
+import 'package:kartwala/views/screens/detail/screens/screens/subCategoryTileWidget.dart';
 
 class CategoryScreen extends StatefulWidget {
   const CategoryScreen({super.key});
@@ -23,6 +24,19 @@ class _CategoryScreenState extends State<CategoryScreen> {
   void initState() {
     super.initState();
     categories = CategoryController().loadCatogaries();
+
+    categories.then((category) {
+      for (var i in category) {
+        if (i.name == "Laptops") {
+          setState(() {
+            categorySelected = i;
+          });
+
+          //load sub category for the laptops
+          loadSubCategories(i.name);
+        }
+      }
+    });
   }
 
   //load subCategory
@@ -93,62 +107,59 @@ class _CategoryScreenState extends State<CategoryScreen> {
             child: categorySelected != null
                 ? Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          categorySelected!.name,
-                          style: GoogleFonts.quicksand(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.7,
-                          ),
-                        ),
-                        Container(
-                          height: 150,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: NetworkImage(categorySelected!.banner),
-                              fit: BoxFit.contain,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            categorySelected!.name,
+                            style: GoogleFonts.quicksand(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.7,
                             ),
                           ),
-                        ),
-                        GridView.builder(
-                          shrinkWrap: true,
-                          itemCount: subCategory.length,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3,
-                                crossAxisSpacing: 8,
-                                mainAxisSpacing: 4,
+                          Container(
+                            height: 150,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: NetworkImage(categorySelected!.banner),
+                                fit: BoxFit.contain,
                               ),
-                          itemBuilder: (context, index) {
-                            final subCategoriesData = subCategory[index];
-                            return Column(
-                              children: [
-                                Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.shade200,
-                                  ),
-                                  child: Center(
-                                    child: Image.network(
-                                      subCategoriesData.subCategoryImage,
-                                      fit: BoxFit.cover,
+                            ),
+                          ),
+                          subCategory.isNotEmpty
+                              ? GridView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: subCategory.length,
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 3,
+                                        crossAxisSpacing: 8,
+                                        mainAxisSpacing: 4,
+                                        childAspectRatio: 2 / 3,
+                                      ),
+                                  itemBuilder: (context, index) {
+                                    final subCategoriesData =
+                                        subCategory[index];
+                                    return Subcategorytilewidget(
+                                      image: subCategoriesData.subCategoryImage,
+                                      title: subCategoriesData.subcategoryname,
+                                    );
+                                  },
+                                )
+                              : Center(
+                                  child: Text(
+                                    "No Sub Categories",
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w400,
+                                      letterSpacing: 1.7,
                                     ),
                                   ),
                                 ),
-                                Center(
-                                  child: Text(
-                                    subCategoriesData.subcategoryname,
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   )
                 : Container(),
